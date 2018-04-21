@@ -1,16 +1,5 @@
 (provide 'emacs_config)
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(package-initialize)
-
-;; Make sure use-package has been installed
-(setq package-list '(use-package))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
 ;; Appearance settings
 (use-package material-theme :ensure t)
 ;; (load-theme 'material t) ;; load material theme
