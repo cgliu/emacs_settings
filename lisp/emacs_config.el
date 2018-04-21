@@ -2,11 +2,11 @@
 
 ;; Appearance settings
 (use-package material-theme :ensure t)
-;; (load-theme 'material t) ;; load material theme
-(load-theme 'material-light t) ;; load material theme
+(load-theme 'material t) ;; load material theme
+;; (load-theme 'material-light t) ;; load material theme
 
-(setq inhibit-startup-message t) ;; hide the startup message
-(global-linum-mode t) ;; enable line numbers globally
+;; (setq inhibit-startup-message t) ;; hide the startup message
+;; (global-linum-mode t) ;; enable line numbers globally
 
 (setq inhibit-startup-message t)
 (setq frame-title-format "emacs@%b")
