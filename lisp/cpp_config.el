@@ -1,28 +1,5 @@
 (provide 'cpp_config)
 
-;; ;; --------------------------------------------------
-;; ;; rtags setting
-;; (require 'company)
-;; (require 'rtags)
-
-;; (setq rtags-autostart-diagnostics t)
-
-;; (setq rtags-completions-enabled t)
-;; (push 'company-rtags company-backends)
-
-;; (rtags-enable-standard-keybindings)
-;; (define-key c-mode-base-map (kbd "M-=") (function rtags-symbol-type))
-;; (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-;; (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-current-file))
-;; (define-key c-mode-base-map (kbd "M-/") (function rtags-find-all-references-at-point))
-;; (define-key c-mode-base-map (kbd "M-i") (function rtags-imenu))
-;; (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-;; (define-key c-mode-base-map (kbd "C-x [") (function rtags-location-stack-back))
-;; (define-key c-mode-base-map (kbd "C-x ]") (function rtags-location-stack-forward))
-;; (require 'rtags-helm)
-;; (setq rtags-use-helm t)
-
-
 ;; --------------------------------------------------
 (use-package helm-gtags :ensure t)
 
@@ -49,7 +26,8 @@
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
 (add-hook 'python-mode-hook 'helm-gtags-mode)
 
-;; (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+
+(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
 (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
@@ -131,3 +109,29 @@
 
 (setq-default indent-tabs-mode nil)
 (c-set-offset 'comment-intro 0)
+
+
+;; ycmd it works very well, but sometimes not as powerful as gtags ;;
+;; cd $HOME
+;; git clone https://github.com/Valloric/ycmd
+;; cd ycmd
+;; ./build.py --clang-completer
+
+;; (require 'ycmd)
+;; (require 'company)
+;; (require 'company-ycmd)
+;; (require 'flycheck-ycmd)
+;; ;; ycmd in all supported modes.
+;; (add-hook 'after-init-hook #'global-ycmd-mode)
+;; (set-variable 'ycmd-server-command `("python",  (file-truename  "~/ycmd/ycmd")))
+;; ;; auto-load .ycmd_extra_conf.py files for whitelisted projects
+;; (set-variable 'ycmd-extra-conf-whitelist '("~/av/*"))
+;; (company-ycmd-setup)
+;; (flycheck-ycmd-setup)
+;; (setq flycheck-indication-mode nil)
+;; (setq company-idle-delay 0.2)
+;; (eval-after-load 'cc-mode '(define-key c-mode-base-map (kbd "M-.") (function ycmd-goto)))
+;; ;; Company and flycheck can interfere in emacs -nw.
+;; (when (not (display-graphic-p))
+;;   (setq flycheck-indication-mode nil))
+;; (global-ycmd-mode)
