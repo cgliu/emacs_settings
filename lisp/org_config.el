@@ -120,7 +120,7 @@
         ))
 
 ;; inline LaTex formula
-;; (setq org-export-with-LaTeX-fragments t)
+(setq org-export-with-LaTeX-fragments nil)
 
 ;; my function
 ;; sandbox

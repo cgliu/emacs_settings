@@ -27,6 +27,8 @@
 (require 'experimental)
 (require 'myfun)
 (require 'personal_config)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -34,7 +36,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-ycmd company-ycmd ycmd use-package undo-tree smex py-autopep8 powerline org-plus-contrib openwith material-theme magit-find-file helm-swoop helm-projectile helm-gtags helm-google helm-git-grep helm-ag elpy ein diff-hl clang-format better-defaults))))
+    (company-mode use-package undo-tree smex py-autopep8 powerline org-plus-contrib openwith material-theme magit-find-file helm-swoop helm-projectile helm-gtags helm-google helm-git-grep helm-ag elpy ein diff-hl better-defaults auto-complete-clang))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
