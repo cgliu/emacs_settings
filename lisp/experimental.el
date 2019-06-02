@@ -19,13 +19,6 @@
                                 ("\\.\\(?:jp?g\\|png\\)\\'" "eog" (file))))
   (openwith-mode t))
 
-;; (use-package color-theme
-;;   :ensure t
-;;   :config
-;;   (color-theme-initialize)
-;;   (load-theme 'tango-dark))
-
-
 (use-package smex
   :ensure t
   :bind (("M-x" . smex))

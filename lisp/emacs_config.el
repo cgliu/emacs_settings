@@ -1,9 +1,12 @@
 (provide 'emacs_config)
 
 ;; Appearance settings
-(use-package material-theme :ensure t)
-(load-theme 'material t) ;; load material theme
+;; (use-package material-theme :ensure t)
+;; (load-theme 'material t) ;; load material theme
 ;; (load-theme 'material-light t) ;; load material theme
+
+(use-package gruvbox-theme :ensure t)
+(load-theme 'gruvbox-light-hard t)
 
 ;; (setq inhibit-startup-message t) ;; hide the startup message
 ;; (global-linum-mode t) ;; enable line numbers globally
@@ -139,7 +142,7 @@
   "Returns GTAGS root directory or nil if doesn't exist."
   (with-temp-buffer
     (if (zerop (call-process "global" nil t nil "-pr"))
-	(buffer-substring (point-min) (1- (point-max)))
+        (buffer-substring (point-min) (1- (point-max)))
       nil)))
 
 (defun gtags-update ()
@@ -175,3 +178,10 @@
 
 ;; use company-mode in all buffers
 (add-hook 'after-init-hook 'global-company-mode)
+
+;; config for the octave mode
+(setq auto-mode-alist (append '(("\\.m$" . octave-mode))
+      auto-mode-alist))
+
+(require 'rav-launch)
+(global-set-key (kbd "C-h z") 'rav-launch)

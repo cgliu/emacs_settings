@@ -26,7 +26,7 @@
 (require 'global_kbinding)
 (require 'experimental)
 (require 'myfun)
-(require 'personal_config)
+;; (require 'personal_config)
 
 
 (custom-set-variables

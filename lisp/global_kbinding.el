@@ -60,7 +60,7 @@
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 
 ;; convenience for programming
-(global-set-key (kbd "C-p") 'magit-find-file-completing-read)
+(global-set-key (kbd "C-c p") 'magit-find-file-completing-read)
 ;; keybinding for edit convenience
 (global-set-key (kbd "C-c w")         (quote copy-word))
 (global-set-key (kbd "C-x b") `ido-switch-buffer)
