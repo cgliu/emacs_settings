@@ -183,5 +183,3 @@
 (setq auto-mode-alist (append '(("\\.m$" . octave-mode))
       auto-mode-alist))
 
-(require 'rav-launch)
-(global-set-key (kbd "C-h z") 'rav-launch)
