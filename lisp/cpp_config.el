@@ -37,29 +37,6 @@
 (define-key helm-gtags-mode-map (kbd "C-c <right>") 'helm-gtags-next-history)
 
 
-;;
-;; (setq path-to-ctags "/usr/local/bin/ctags") ;; <- your ctags path here
-;; (defun create-tags (dir-name)
-;;   "Create tags file."
-;;   (interactive "DDirectory: ")
-;;   (shell-command
-;;    (format "%s -f TAGS -e -R %s" path-to-ctags (directory-file-name dir-name)))
-;;   )
-
-;; ;; git grep
-;; (require 'helm-git-grep) ;; Not necessary if installed by package.el
-;; (global-set-key (kbd "C-c g") 'helm-git-grep)
-;; ;; Invoke `helm-git-grep' from isearch.
-;; (define-key isearch-mode-map (kbd "C-c g") 'helm-git-grep-from-isearch)
-;; ;; Invoke `helm-git-grep' from other helm.
-;; (eval-after-load 'helm
-;;   '(define-key helm-map (kbd "C-c g") 'helm-git-grep-from-helm))
-
-
-;; cscope settings
-;; (require 'xcscope)
-
-(add-to-list 'auto-mode-alist '("\\.hidl\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.hh\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.cc\\'" . c++-mode))
@@ -111,27 +88,27 @@
 (c-set-offset 'comment-intro 0)
 
 
-;; ycmd it works very well, but sometimes not as powerful as gtags ;;
-;; cd $HOME
-;; git clone https://github.com/Valloric/ycmd
-;; cd ycmd
-;; ./build.py --clang-completer
+(setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp
+    projectile hydra flycheck company avy which-key helm-xref dap-mode))
 
-;; (require 'ycmd)
-;; (require 'company)
-;; (require 'company-ycmd)
-;; (require 'flycheck-ycmd)
-;; ;; ycmd in all supported modes.
-;; (add-hook 'after-init-hook #'global-ycmd-mode)
-;; (set-variable 'ycmd-server-command `("python",  (file-truename  "~/ycmd/ycmd")))
-;; ;; auto-load .ycmd_extra_conf.py files for whitelisted projects
-;; (set-variable 'ycmd-extra-conf-whitelist '("~/av/*"))
-;; (company-ycmd-setup)
-;; (flycheck-ycmd-setup)
-;; (setq flycheck-indication-mode nil)
-;; (setq company-idle-delay 0.2)
-;; (eval-after-load 'cc-mode '(define-key c-mode-base-map (kbd "M-.") (function ycmd-goto)))
-;; ;; Company and flycheck can interfere in emacs -nw.
-;; (when (not (display-graphic-p))
-;;   (setq flycheck-indication-mode nil))
-;; (global-ycmd-mode)
+(when (cl-find-if-not #'package-installed-p package-selected-packages)
+  (package-refresh-contents)
+  (mapc #'package-install package-selected-packages))
+
+(which-key-mode)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      treemacs-space-between-root-nodes nil
+      company-idle-delay 0.0
+      company-minimum-prefix-length 1
+      lsp-idle-delay 0.1 ;; clangd is fast
+      ;; be more ide-ish
+      lsp-headerline-breadcrumb-enable t)
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools)
+  (yas-global-mode))
