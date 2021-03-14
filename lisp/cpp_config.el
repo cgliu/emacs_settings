@@ -112,3 +112,20 @@
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (require 'dap-cpptools)
   (yas-global-mode))
+
+;; An example of how to define your own compile command.
+;; (setq my-project-root "~/code/cpp_project")
+;; (define compile-project()
+;;   " Compile project"
+;;   (interactive)
+;;   (let ((default-directory my-project-root))
+;;     (progn
+;;       (compile "make")
+;;       )
+;;     (setq cur (select-window))
+;;     (setq w (get-buffer-window "*compilation*"))
+;;     (select-window w)
+;;     (setq h (window-height w))
+;;     (select-window cur))
+;;   )
+;; (global-set-key (kbd "C-x RET") `compile-project)
