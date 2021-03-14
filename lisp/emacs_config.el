@@ -1,12 +1,12 @@
 (provide 'emacs_config)
 
 ;; Appearance settings
-;; (use-package material-theme :ensure t)
-;; (load-theme 'material t) ;; load material theme
+(use-package material-theme :ensure t)
+(load-theme 'material t) ;; load material theme
 ;; (load-theme 'material-light t) ;; load material theme
 
-(use-package gruvbox-theme :ensure t)
-(load-theme 'gruvbox-light-hard t)
+;; (use-package gruvbox-theme :ensure t)
+;; (load-theme 'gruvbox-light-hard t)
 
 ;; (setq inhibit-startup-message t) ;; hide the startup message
 ;; (global-linum-mode t) ;; enable line numbers globally
