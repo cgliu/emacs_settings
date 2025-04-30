@@ -53,6 +53,9 @@
 ;; (global-set-key "\C-cs" 'gtags-find-symbol) ;; C-M-, find all usages of symbol. ;; C-M-, find all usages of symbol.
 ;; (global-set-key "\C-cf" 'gtags-find-file)
 
+(global-set-key (kbd "\C-c <down>") 'xref-find-definitions) ;; M-. finds tag
+(global-set-key (kbd "\C-c <up>") 'xref-go-back) ;; M-. finds tag
+
 ;; experimental stuffs
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 (global-set-key (kbd "C-x <down>") 'windmove-down)

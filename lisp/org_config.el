@@ -3,6 +3,8 @@
 (use-package org
   :ensure org-plus-contrib)
 
+;; indent the first line of paragraph in org mode 
+(setq org-adapt-indentation t)
 
 (setq org-html-validation-link nil)
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -85,9 +87,11 @@
 ;; PDFs visited in Org-mode are opened in Evince (and not in the default choice) http://stackoverflow.com/a/8836108/789593
 (cond ((eq system-type 'gnu/linux)
        (add-hook 'org-mode-hook
-		 '(lambda ()
+		 #'(lambda ()
 		    (delete '("\\.pdf\\'" . default) org-file-apps)
-		    (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s")))))
+		    (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))
+                    (add-to-list 'org-file-apps '("\\.x?html?\\'" . "/usr/bin/firefox %s"))
+                    )))
       )
 
 (setq org-agenda-custom-commands
@@ -124,15 +128,21 @@
 (setq org-export-with-LaTeX-fragments nil)
 
 ;; my function
+(require 'org-ref)
 ;; sandbox
-;; (defun org-mode-reftex-setup ()
-;;   (load-library "reftex")
-;;   (and (buffer-file-name)
-;;        (file-exists-p (buffer-file-name))
-;;        (reftex-parse-all))
-;;   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-;;   )
-;; (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
+
+
+(defun org-mode-reftex-setup ()
+  (load-library "reftex")
+  (and (buffer-file-name)
+       (file-exists-p (buffer-file-name))
+       (reftex-parse-all))
+  (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+  )
+
+(add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
 ;; (setq org-agenda-files (quote ("~/org/work.org" "~/org/mytodo.org" "~/org/job.org" "e:/SJTU/todo.org")))
 
 ;;see detail in org-html.org: org-export-html-postamble-format
@@ -147,3 +157,12 @@
 
 
 (setq org-plantuml-jar-path (expand-file-name "~/local/bin/plantuml.jar"))
+
+;; support Chinese
+(setq-default TeX-engine 'xetex)
+(setq org-latex-to-pdf-process 
+      '("xelatex -interaction nonstopmode %f"
+        "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+
+(define-key org-mode-map (kbd "<f6>") 'org-latex-export-to-pdf)
+

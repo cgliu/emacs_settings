@@ -1,6 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -12,6 +12,7 @@
 
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/Dropbox/emacs")
+(add-to-list 'load-path "~/.emacs.d/lisp/org-mode/lisp")
 
 (require 'emacs_config)
 (require 'cpp_config)
@@ -21,4 +22,10 @@
 (require 'global_kbinding)
 (require 'experimental)
 (require 'myfun)
-;; (require 'personal_config)
+
+(put 'list-timers 'disabled nil)
+
+;; specify diary file path
+(setq diary-file "/home/cgliu/Dropbox/emacs/diary")
+(require 'ox-hugo)
+

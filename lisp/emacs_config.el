@@ -1,5 +1,18 @@
 (provide 'emacs_config)
 
+(use-package recentf
+  :ensure nil
+  :hook (after-init . recentf-mode)
+  :config
+  (setq recentf-save-file "~/.emacs.d/recentf"
+        recentf-max-menu-items 100
+        recentf-auto-cleanup 'never))
+
+
+;; (require 'personal_config)
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+(setq warning-minimum-level :error)
+
 ;; Appearance settings
 (use-package material-theme :ensure t)
 (load-theme 'material t) ;; load material theme
@@ -69,7 +82,7 @@
                 js-mode-hook
                 R-mode-hook))
   (add-hook mode
-            '(lambda ()
+            #'(lambda ()
                (flyspell-prog-mode))))
 
 (defun flyspell-check-next-highlighted-word ()

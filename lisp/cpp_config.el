@@ -129,3 +129,9 @@
 ;;     (select-window cur))
 ;;   )
 ;; (global-set-key (kbd "C-x RET") `compile-project)
+
+
+;; c++ style
+(setq c-default-style '((c++-mode . "stroustrup")
+                        (other . "gnu")))
+(setq c-basic-offset 4) ; Sets indentation to 4 spaces
