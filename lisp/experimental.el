@@ -10,18 +10,24 @@
   (use-package magit-find-file
     :ensure t))
 
+;; Forge: GitLab code review integration
+(use-package forge
+  :ensure t
+  :after magit)
+
 (use-package openwith
   :ensure t
   :config
-  (setq openwith-associations '(("\\.pdf\\'" "evince" (file))
-                                ("\\.\\(?:mpe?g\\|avi\\|mp4\\|wmv\\|ogv\\|3gp\\|mov\\|wmv\\|webm\\)\\'" "vlc"  (file))
-                                ;; ("\\.\\(?:mpe?g\\|avi\\|wmv\\|ogv\\|3gp\\|mov\\|wmv\\)\\'" "mplayer"  ("-idx" file))
-                                ("\\.\\(?:jp?g\\|png\\)\\'" "eog" (file))))
+  (setq openwith-associations
+        (if (eq system-type 'darwin)
+            '(("\\.pdf\\'" "open" (file))
+              ("\\.\\(?:mpe?g\\|avi\\|mp4\\|wmv\\|ogv\\|3gp\\|mov\\|wmv\\|webm\\)\\'" "open" (file)))
+          '(("\\.pdf\\'" "evince" (file))
+            ("\\.\\(?:mpe?g\\|avi\\|mp4\\|wmv\\|ogv\\|3gp\\|mov\\|wmv\\|webm\\)\\'" "vlc" (file)))))
   (openwith-mode t))
 
 (use-package smex
   :ensure t
-  :bind (("M-x" . smex))
   :config (smex-initialize))
 
 (use-package undo-tree

@@ -14,21 +14,27 @@
 (setq warning-minimum-level :error)
 
 ;; Appearance settings
-(use-package material-theme :ensure t)
-(load-theme 'material t) ;; load material theme
+;; (use-package material-theme :ensure t)
+;; (load-theme 'material t) ;; load material theme
 ;; (load-theme 'material-light t) ;; load material theme
 
+(use-package modus-themes :ensure t)
+;; (load-theme 'modus-vivendi t) ;; load material theme
+(load-theme 'modus-vivendi-tinted t) ;; load material theme
 ;; (use-package gruvbox-theme :ensure t)
 ;; (load-theme 'gruvbox-light-hard t)
+;; (load-theme 'doom-one t)
+;; (load-theme 'tsdh-light)
 
-;; (setq inhibit-startup-message t) ;; hide the startup message
+
+(setq inhibit-startup-message t) ;; hide the startup message
 ;; (global-linum-mode t) ;; enable line numbers globally
 
 (setq inhibit-startup-message t)
 (setq frame-title-format "emacs@%b")
 (global-font-lock-mode t)
-(menu-bar-mode nil)
-(transient-mark-mode nil)
+(menu-bar-mode -1)
+(transient-mark-mode -1)
 (line-number-mode t)
 (column-number-mode t)
 (setq truncate-partial-width-windows t)
@@ -55,10 +61,10 @@
 (setq query-replace-highlight t) ;;will highlight during query.
 
 (setq search-highlight t) ;;highlight incremental search
-(global-hl-line-mode)
+;; (global-hl-line-mode)
 
 ;; Configure the timestamp format
-(add-hook 'write-file-hooks 'time-stamp)
+(add-hook 'before-save-hook 'time-stamp)
 (setq time-stamp-format "%:u %02m/%02d/%04y %02H:%02M:%02S (%s)")
 
 ;; --------------------------------------------------------------------------------
@@ -102,8 +108,8 @@
   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
 
-;; major mode  text-mode,  fundamental-mode.
-(setq default-major-mode 'text-mode)
+;; major mode for new buffers
+(setq-default major-mode 'text-mode)
 
 ;; dired settings
 (setq dired-recursive-copies 'top)
@@ -115,7 +121,7 @@
 
 ;; When a file changes on disk outside of my text editor, I would like my editor to notice the change and start showing
 ;; the new version unless I have unsaved changes.
-(auto-revert-mode t)
+(global-auto-revert-mode 1)
 
 ;; general hooks
 (add-hook 'diary-mode-hook 'flyspell-mode)
@@ -146,25 +152,25 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; --------------------------------------------------------------------------------
-;; gtags
-;; --------------------------------------------------------------------------------
-(setq gtags-auto-update t)
+;; ;; --------------------------------------------------------------------------------
+;; ;; gtags
+;; ;; --------------------------------------------------------------------------------
+;; (setq gtags-auto-update t)
 
-(defun gtags-root-dir ()
-  "Returns GTAGS root directory or nil if doesn't exist."
-  (with-temp-buffer
-    (if (zerop (call-process "global" nil t nil "-pr"))
-        (buffer-substring (point-min) (1- (point-max)))
-      nil)))
+;; (defun gtags-root-dir ()
+;;   "Returns GTAGS root directory or nil if doesn't exist."
+;;   (with-temp-buffer
+;;     (if (zerop (call-process "global" nil t nil "-pr"))
+;;         (buffer-substring (point-min) (1- (point-max)))
+;;       nil)))
 
-(defun gtags-update ()
-    "Make GTAGS incremental update"
-    (call-process "global" nil nil nil "-u"))
+;; (defun gtags-update ()
+;;     "Make GTAGS incremental update"
+;;     (call-process "global" nil nil nil "-u"))
 
-(defun gtags-update-hook ()
-  (when (gtags-root-dir)
-    (gtags-update)))
+;; (defun gtags-update-hook ()
+;;   (when (gtags-root-dir)
+;;     (gtags-update)))
 
 (defun ask-before-closing ()
   "Ask whether or not to close, and then close if y was pressed"
@@ -195,4 +201,15 @@
 ;; config for the octave mode
 (setq auto-mode-alist (append '(("\\.m$" . octave-mode))
       auto-mode-alist))
+
+
+(require 'f3) ; Ensure the f3 package is loaded
+(setq f3-default-directory "~/av-stack/")
+
+;; (setq f3-before-args '("-path" "*/node_modules/*" "-prune" "-o"))
+
+
+(setq select-enable-clipboard t)
+(setq select-enable-primary nil)
+
 

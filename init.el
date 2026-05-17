@@ -1,31 +1,47 @@
+;;; init.el --- Emacs configuration entry point -*- lexical-binding: t -*-
+
+;; Package archives
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; Load path
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/Dropbox/emacs")
-(add-to-list 'load-path "~/.emacs.d/lisp/org-mode/lisp")
 
+;; Load modules
 (require 'emacs_config)
+(require 'local_helm_config)
+(require 'lsp_config)
 (require 'cpp_config)
 (require 'python_config)
-(require 'local_helm_config)
 (require 'org_config)
-(require 'global_kbinding)
 (require 'experimental)
 (require 'myfun)
+(require 'gemini_config)
+(require 'navigation_config)
+(require 'writing_config)
+(require 'vterm_config)
+(require 'gitlab_config)
+(require 'private_config)
+(require 'global_kbinding)
 
-(put 'list-timers 'disabled nil)
+;; Custom file
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
 
-;; specify diary file path
-(setq diary-file "/home/cgliu/Dropbox/emacs/diary")
-(require 'ox-hugo)
+;; Diary
+(setq diary-file "~/Dropbox/emacs/diary")
 
+;; Auto-revert (notify-based)
+(setq auto-revert-use-notify t)
+
+;; Visual line mode globally
+(global-visual-line-mode 1)

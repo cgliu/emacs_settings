@@ -55,15 +55,25 @@
   )
 (use-package helm-projectile
     :ensure t)
+
 (use-package helm-gtags
   :ensure t
   :config
   (global-set-key (kbd "C-j") 'helm-gtags-select)
   )
-(use-package helm-git-grep
+
+;; (use-package helm-git-grep
+;;   :ensure t
+;;   :config
+;;   (global-set-key (kbd "C-t") 'helm-git-grep-at-point)
+;;   )
+
+;; helm-rg is much faster than git-grep
+(use-package helm-rg
   :ensure t
   :config
-  (global-set-key (kbd "C-t") 'helm-git-grep-at-point)
+  (setq helm-rg-default-directory "~/av-stack")
+  (global-set-key (kbd "C-t") 'helm-rg)
   )
 
 
@@ -74,3 +84,18 @@
   (setq helm-ag-insert-at-point 'symbol)
   (global-set-key (kbd "C-c s") 'helm-ag)
   )
+
+;; new added
+(setq helm-git-grep-at-point-no-exec-p t)
+(setq helm-execute-action-at-once-if-one nil)
+(setq helm-selection-must-match nil)
+(setq helm-move-to-line-cycle-in-source nil)
+
+;; For more control over helm behavior
+(setq helm-exit-idle-delay 0.01)
+(setq helm-full-frame nil)
+
+(with-eval-after-load 'helm-git-grep
+  (setq helm-git-grep-default-action 'helm-git-grep-action)
+  (define-key helm-git-grep-map (kbd "<return>") 'helm-git-grep-action))
+

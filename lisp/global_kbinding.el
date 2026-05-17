@@ -1,69 +1,88 @@
 (provide 'global_kbinding)
 
-;; windows layout management
+;; Window layout management
 (winner-mode)
 (global-set-key [f7] 'winner-undo)
 (global-set-key [C-f7] 'winner-redo)
 
-;; magit seeting
+;; Magit
 (global-set-key (kbd "C-x g") 'magit-status)
-;; dictionary
-(global-set-key (kbd "C-c q") 'online-dict)
 
-;; ;; ;;;ibuffer
-;; ;; (require 'ibuffer)
-;; ;; (global-set-key (kbd "C-x C-b") 'ibuffer)
+;; Send region
+(global-set-key (kbd "C-c q") 'my/send-region-to-buffer)
 
-;; backspace
+;; Backspace
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
-;;bookmark
 
-;;(global-set-key [(f1)] 'bookmark-jump)
-;;(global-set-key [(f2)] ('save-buffer 'TeX-command-master ))
+;; Quick file access
 (global-set-key [(f2)] 'open-work)
 (global-set-key [(f3)] 'open-personal)
 (global-set-key [(f4)] 'open-notes)
 (global-set-key [(f5)] 'open-log)
-
 (global-set-key [f6] 'goto-line)
-;; (global-set-key [(f7)] 'compile)
 (global-set-key [(f8)] 'calendar)
-;; (global-set-key [(f9)] 'list-bookmarks)
-(global-set-key [(f12)] 'open-english)
+(global-set-key (kbd "C-c e") 'open-english)
 
+;; Paren matching
 (global-set-key (kbd "C-o") 'find-matching-paren)
 
-;;(global-set-key (kbd "C-c t") 'line-to-top-of-window)
-;; (global-set-key "\C-x\C-b" 'buffer-menu)
-;; (global-set-key "\C-ci" 'imenu)
-
+;; Compilation / errors
 (global-set-key "\C-cn" 'next-error)
-;; (global-set-key "\C-c;" 'comment-region)
-
 (global-set-key "\C-x\C-m" 'compile)
-;; (define-key c-mode-map "\M-n" 'next-error)
 
-(global-set-key "\C-c\C-c"  'comment-region)
+;; Comment region
+(global-set-key "\C-c\C-c" 'comment-region)
 
+;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-;; (global-set-key "\M-." 'gtags-find-tag) ;; M-. finds tag
-;; (global-set-key "\M-*" 'gtags-pop-stack) ;; M-. finds tag
-;; (global-set-key "\C-cr" 'gtags-find-rtag)
-;; (global-set-key "\C-cs" 'gtags-find-symbol) ;; C-M-, find all usages of symbol. ;; C-M-, find all usages of symbol.
-;; (global-set-key "\C-cf" 'gtags-find-file)
+;; Jump to definition with fallback
+(defun my/jump-to-definition ()
+  "Try xref-find-definitions, fall back to dumb-jump-go on failure."
+  (interactive)
+  (condition-case nil
+      (xref-find-definitions (thing-at-point 'symbol t))
+    (error (dumb-jump-go))))
 
-(global-set-key (kbd "\C-c <down>") 'xref-find-definitions) ;; M-. finds tag
-(global-set-key (kbd "\C-c <up>") 'xref-go-back) ;; M-. finds tag
+(global-set-key (kbd "\C-c <down>") 'my/jump-to-definition)
+(global-set-key (kbd "\C-c <up>") 'xref-go-back)
+(global-set-key "\C-cf" 'helm-lsp-global-workspace-symbol)
+(global-set-key "\C-cr" 'xref-find-references)
 
-;; experimental stuffs
+;; Window navigation
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 (global-set-key (kbd "C-x <down>") 'windmove-down)
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 (global-set-key (kbd "C-x <right>") 'windmove-right)
+(global-set-key (kbd "C-x o") (lambda () (interactive) (other-window -1)))
 
-;; convenience for programming
-(global-set-key (kbd "C-c p") 'magit-find-file-completing-read)
-;; keybinding for edit convenience
-(global-set-key (kbd "C-c w")         (quote copy-word))
-(global-set-key (kbd "C-x b") `ido-switch-buffer)
+;; Magit find file
+(global-set-key (kbd "C-c M-p") 'magit-find-file-completing-read)
+
+;; Copy/edit convenience
+(global-set-key (kbd "C-c w") 'copy-word)
+(global-set-key (kbd "C-x b") 'ido-switch-buffer)
+(global-set-key (kbd "C-c C-h") 'copy-buffer-to-clipboard)
+(global-set-key (kbd "C-c l") #'my/copy-file-region)
+
+;; Search
+(global-set-key "\C-cs" 'helm-ag)
+(global-set-key "\M-l" 'git-share)
+(global-set-key "\M-*" 'helm-lsp-global-workspace-symbol)
+(global-set-key (kbd "C-c C-f") 'f3)
+
+;; Send to buffer and run
+(global-set-key (kbd "<f12>") 'my/send-to-buffer-and-run)
+
+;; Spelling
+(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
+
+;; Disable accidental quit
+(global-unset-key (kbd "C-x C-c"))
+
+;; Right-click context menu
+(context-menu-mode 1)
+
+;; Narrow
+(put 'narrow-to-region 'disabled nil)
+(put 'list-timers 'disabled nil)

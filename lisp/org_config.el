@@ -1,7 +1,7 @@
 (provide 'org_config)
 
-(use-package org
-  :ensure org-plus-contrib)
+;; Use org from GNU ELPA (org-plus-contrib is defunct)
+(use-package org :pin gnu)
 
 ;; indent the first line of paragraph in org mode 
 (setq org-adapt-indentation t)
@@ -11,7 +11,7 @@
 (setq org-log-done 'time)
 ;; org-model keybinding
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
+;; (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 ;; (global-set-key "\C-cb" 'org-iswitchb)
 ;; clock task
@@ -166,3 +166,118 @@
 
 (define-key org-mode-map (kbd "<f6>") 'org-latex-export-to-pdf)
 
+;; Graduated heading sizes
+(with-eval-after-load 'org
+  (set-face-attribute 'org-level-1 nil :height 1.3 :weight 'bold)
+  (set-face-attribute 'org-level-2 nil :height 1.2 :weight 'bold)
+  (set-face-attribute 'org-level-3 nil :height 1.1 :weight 'bold)
+  (set-face-attribute 'org-document-title nil :height 1.4 :weight 'bold))
+
+;; org-modern: pretty bullets, tables, timestamps, tags
+(use-package org-modern
+  :ensure t
+  :hook (org-mode . org-modern-mode)
+  :config
+  (setq org-modern-star '("◉" "○" "◈" "◇" "▸")
+        org-modern-hide-stars nil))
+
+;; Visual polish
+(setq org-startup-with-inline-images t
+      org-hide-emphasis-markers t
+      org-pretty-entities t
+      org-ellipsis " ▾")
+(add-hook 'org-mode-hook #'org-indent-mode)
+(add-hook 'org-mode-hook (lambda () (setq-local line-spacing 0.1)))
+
+;; Inline image sizing (default 50% of window width)
+(setq org-image-actual-width nil)
+(advice-add 'org--create-inline-image :filter-args
+            (lambda (args)
+              (let ((file (nth 0 args))
+                    (width (nth 1 args)))
+                (list file (or width (truncate (* 0.5 (window-pixel-width))))))))
+
+;; Open links in current window
+(setq org-link-frame-setup
+      '((vm . vm-visit-folder-other-frame)
+        (vm-imap . vm-visit-imap-folder-other-frame)
+        (gnus . org-gnus-no-new-news)
+        (file . find-file)
+        (wl . wl-other-frame)))
+
+
+
+(setq org-html-htmlize-output-type 'inline-css)
+(setq org-publish-project-alist
+      '(("local"
+         :base-directory "."
+         :publishing-directory "."
+         :publishing-function org-html-publish-to-html)
+
+        ("my-site"
+         :components ("org-files" "static-files"))
+
+        ("org-files"
+         :base-directory "~/Dropbox/post/"
+         :publishing-directory "~/public_html/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :auto-sitemap t                  ; Enable sitemap/index
+         :sitemap-filename "index.org"    ; Name of index file
+         :sitemap-title "Frank Liu's Internal Website"         ; Title for index page
+         :sitemap-function my-sitemap-function
+         :completion-function (lambda (plist)
+                                (shell-command "~/bin/org-sync.sh")))
+
+        ("static-files"
+         :base-directory "~/Dropbox/post/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|svg\\|py"
+         :publishing-directory "~/public_html/"
+         :recursive t
+         :publishing-function org-publish-attachment)))
+
+(defun my-sitemap-function (title list)
+  "Custom sitemap with headers"
+  (concat "#+TITLE: " title "\n"
+          "#+OPTIONS: toc:nil ^:{}\n\n"
+          (org-list-to-org list)))
+(require 'ox-reveal)
+(use-package ox-reveal
+  :ensure t
+  :config
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+
+(defun my/org-export-with-dark-theme (orig-fun &rest args)
+  (let ((current-theme (car custom-enabled-themes)))
+    (load-theme 'manoj-dark t)  ; or your preferred dark theme
+    (unwind-protect
+        (apply orig-fun args)
+      (when current-theme
+        (load-theme current-theme t)))))
+
+(advice-add 'org-html-export-to-html :around #'my/org-export-with-dark-theme)
+
+(setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "PROJECT(p)" 
+                                    "|"
+                                    "DONE(d/!)" "CANCELLED(c@/!)")))
+
+(setq org-html-head "<style> body { background-color: #FFFDE7; } em, i { color: red; } mjx-container { padding: 4px 8px; } pre, code { background-color: #1e1e2e; color: #cdd6f4; padding: 4px 8px; border-radius: 4px; } </style>")
+
+(setq org-export-with-toc nil)
+(setq org-export-with-section-numbers nil)
+
+(setq org-html-postamble nil)
+;; disable underscore 
+(setq org-export-with-sub-superscripts nil)
+
+(defun my/publish-org-files ()
+  "Publish all .org files in the current directory to HTML in the same directory."
+  (interactive)
+  (let ((dir (file-name-directory (or buffer-file-name default-directory))))
+    (org-publish
+     `("tmp-publish"
+       :base-directory ,dir
+       :publishing-directory ,dir
+       :base-extension "org"
+       :publishing-function org-html-publish-to-html)
+     t)))

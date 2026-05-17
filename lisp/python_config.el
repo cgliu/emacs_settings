@@ -1,38 +1,44 @@
 (provide 'python_config)
 
-;; init.el --- Emacs configuration
-;; INSTALL PACKAGES
-;; --------------------------------------
-
 (use-package better-defaults :ensure t)
 (use-package ein :ensure t)
-
-;; For elpy (Emacs Lisp Python Environment) to run properly,  
-;; 1) Make use the following packages are installed. If not, run
-;; pip install --upgrade elpy jedi rope black flake8 autopep8 yapf
-;; 2) If you are using a virtual environment, activate it first and make sure Emacs is using the same venv  
-(use-package elpy :ensure t)
-
 (use-package flyspell :ensure t)
 (use-package py-autopep8 :ensure t)
 
-;; PYTHON CONFIGURATION
-;; --------------------------------------
+(use-package elpy
+  :ensure t
+  :init (setq elpy-rpc-python-command "python3")
+  :config
+  (elpy-enable)
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
+  (add-hook 'elpy-mode-hook 'py-autopep8-mode)
+  (setq py-autopep8-options '("--max-line-length=120")))
 
-(elpy-enable)
-;; (elpy-use-ipython)
-;; use flycheck not flymake with elpy
-(when (require 'flycheck nil t)
-   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-   (add-hook 'elpy-mode-hook 'flycheck-mode))
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-activate (expand-file-name "~/miniforge3")))
 
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-(setq py-autopep8-options '("--max-line-length=120"))
-;; the following doesn't work
-;; (add-hook 'after-init-hook 'global-color-identifiers-mode)
+;; Python interpreter
+(setq python-interpreter "~/miniforge3/bin/python")
+(setq python-shell-virtualenv-root (expand-file-name "~/miniforge3"))
+(setq python-shell-interpreter (expand-file-name "~/miniforge3/bin/python"))
+(setenv "WORKON_HOME" (expand-file-name "~/miniforge3/bin"))
+(setenv "KMP_DUPLICATE_LIB_OK" "TRUE")
 
-;; (setq column-enforce-column 121)
-;; (global-column-enforce-mode)
+;; Code cell execution (delimited by # %%)
+(defun my/save-and-send-codecell ()
+  "Save buffer then send the current code cell (delimited by # %%) to Python shell."
+  (interactive)
+  (save-buffer)
+  (let ((start (save-excursion
+                 (if (re-search-backward "^# %%" nil t) (forward-line 1) (goto-char (point-min)))
+                 (point)))
+        (end (save-excursion
+               (if (re-search-forward "^# %%" nil t) (line-beginning-position) (point-max)))))
+    (python-shell-send-region start end)))
 
-;; disable ac-complete
-;; (setq ac-modes (delq 'python-mode ac-mode))
+(with-eval-after-load 'python
+  (define-key python-mode-map (kbd "C-c C-c") #'my/save-and-send-codecell))
