@@ -1,3 +1,15 @@
+# Emacs Config Reorganisation — 2026-05-20
+
+## Structure
+- Added comprehensive `.gitignore` (excludes elpa/, eln-cache/, undo/, auto-save-list/, org-persist/, databases, session state)
+- Removed vendored `lisp/org-plus-contrib-20210929/` from git (use elpa instead)
+- Extracted inline org-roam config from init.el → `lisp/org_roam_config.el`
+- Cleaned init.el to be a minimal module loader (49 lines)
+- Stopped tracking `custom.el` and `lisp/private_config.el` (machine-specific)
+- Repo reduced from 400+ tracked files to 21
+
+---
+
 # Emacs Config Fixes — 2026-05-16
 
 ## Security

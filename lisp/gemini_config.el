@@ -24,3 +24,10 @@
     (shell-command-on-region begin end
                              (format "gemini \"%s\"" prompt)
                              (current-buffer) t t)))
+
+;;;; --- agent-shell: ACP-powered agent shell ---
+(use-package agent-shell
+  :ensure t
+  :config
+  (setq agent-shell-google-authentication
+        (agent-shell-google-make-authentication :login t)))

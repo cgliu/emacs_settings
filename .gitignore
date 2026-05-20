@@ -1,0 +1,44 @@
+# Package manager
+elpa/
+eln-cache/
+
+# Generated/cache
+undo/
+auto-save-list/
+org-persist/
+transient/
+url/
+var/
+request/
+xenops/
+elpy/
+
+# Databases
+*.db
+*.sqlite
+forge-database.sqlite
+
+# Session/state files
+history
+recentf
+places
+smex-items
+projects
+bookmarks
+tramp
+ac-comphist.dat
+elgrep-data.el
+
+# Agent/tool artifacts
+.agent-shell/
+agent/
+
+# Legacy vendored packages
+legacy/
+lisp/org-plus-contrib-*/
+
+# Custom (tracked separately if desired)
+custom.el
+
+# Private/sensitive config
+lisp/private_config.el

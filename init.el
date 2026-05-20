@@ -23,10 +23,12 @@
 (require 'cpp_config)
 (require 'python_config)
 (require 'org_config)
+(require 'org_roam_config)
 (require 'experimental)
 (require 'myfun)
 (require 'gemini_config)
 (require 'navigation_config)
+(require 'winpulse_config)
 (require 'writing_config)
 (require 'vterm_config)
 (require 'gitlab_config)
@@ -40,8 +42,8 @@
 ;; Diary
 (setq diary-file "~/Dropbox/emacs/diary")
 
-;; Auto-revert (notify-based)
+;; Global settings
 (setq auto-revert-use-notify t)
-
-;; Visual line mode globally
 (global-visual-line-mode 1)
+
+;;; init.el ends here
